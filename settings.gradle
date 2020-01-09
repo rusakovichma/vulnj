@@ -1,0 +1,14 @@
+rootProject.name = 'zero-threats'
+
+def lookupForProjects(def root, def path) {
+    root.listFiles().each {
+        if (it.isDirectory()) {
+            if (it.list({ dir, name -> name == 'build.gradle' }).length > 0) {
+                include path + it.name
+                lookupForProjects(it, "$path$it.name:")
+            }
+        }
+    }
+}
+
+lookupForProjects(rootDir, '')
