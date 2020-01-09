@@ -1,6 +1,7 @@
 .gradle
 /build/
-**/build/
+model/build/
+api-backend/build/
 /out/
 !gradle/wrapper/gradle-wrapper.jar
 
