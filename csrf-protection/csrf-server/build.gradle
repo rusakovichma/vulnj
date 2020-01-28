@@ -1,0 +1,36 @@
+buildscript {
+    repositories {
+        maven { url "https://repo1.maven.org/maven2/" }
+        maven { url "https://repo.maven.apache.org/maven2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+mainClassName = 'com.rusakovichma.vulnj.repository.Application'
+
+version = '1.0'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    maven { url "https://repo1.maven.org/maven2/" }
+    maven { url "https://repo.maven.apache.org/maven2/" }
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://clojars.org/repo" }
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'com.github.kstyrc:embedded-redis:0.6'
+    compile 'redis.clients:jedis:2.5.1'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}

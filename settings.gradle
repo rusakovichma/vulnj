@@ -1,4 +1,4 @@
-rootProject.name = 'zero-threats'
+rootProject.name = 'vulnerable-java'
 
 def lookupForProjects(def root, def path) {
     root.listFiles().each {
@@ -12,3 +12,4 @@ def lookupForProjects(def root, def path) {
 }
 
 lookupForProjects(rootDir, '')
+
