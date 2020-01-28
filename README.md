@@ -1,1 +1,1 @@
-# Zero Threats tool
+# Java Typical Security Vulnerabilities and Threats researches and demonstrations
