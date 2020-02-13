@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @SpringBootApplication
 @EnableOAuth2Sso
-public class App1Application extends WebMvcConfigurerAdapter {
+public class SsoClientApplication extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -16,6 +16,6 @@ public class App1Application extends WebMvcConfigurerAdapter {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(App1Application.class, args);
+        SpringApplication.run(SsoClientApplication.class, args);
     }
 }
