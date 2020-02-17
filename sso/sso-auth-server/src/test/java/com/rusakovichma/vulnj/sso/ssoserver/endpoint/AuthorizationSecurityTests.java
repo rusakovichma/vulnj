@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.common.exceptions.RedirectMismatchException;
 import org.springframework.security.oauth2.provider.AuthorizationRequest;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint;
@@ -37,7 +38,7 @@ public class AuthorizationSecurityTests {
     @Before
     public void init() throws Exception {
         client = new BaseClientDetails();
-        client.setRegisteredRedirectUri(Collections.singleton("http://localhost:8082/app1/login"));
+        client.setRegisteredRedirectUri(Collections.singleton("http://clientapp:8082/app1/login"));
         client.setAuthorizedGrantTypes(Arrays.asList("authorization_code"));
         endpoint.setClientDetailsService(clientId -> client);
         endpoint.setTokenGranter((grantType, tokenRequest) -> null);
@@ -46,9 +47,9 @@ public class AuthorizationSecurityTests {
     }
 
     @Test
-    public void testApproveWithModifiedState() throws Exception {
+    public void testRightAuthorizationRequest() {
         AuthorizationRequest authorizationRequest = getAuthorizationRequest(
-                "foo", "http://localhost:8082/app1/login", "HG6owT", "user_info", Collections.singleton("code"));
+                "foo", "http://clientapp:8082/app1/login", "HG6owT", "user_info", Collections.singleton("code"));
         model.put(AUTHORIZATION_REQUEST_ATTR_NAME, authorizationRequest);
 
         ModelAndView modelAndView = endpoint.authorize(model, authorizationRequest.getRequestParameters(), sessionStatus, principal);
@@ -56,5 +57,15 @@ public class AuthorizationSecurityTests {
         final String viewExpected = "forward:/oauth/confirm_access";
         assertEquals(viewExpected, modelAndView.getViewName());
     }
+
+    @Test(expected = RedirectMismatchException.class)
+    public void testAuthorizationRequestWithAttackerRedirect() throws Exception {
+        AuthorizationRequest authorizationRequest = getAuthorizationRequest(
+                "foo", "http://attackerapp:8082/app1/login", "HG6owT", "user_info", Collections.singleton("code"));
+        model.put(AUTHORIZATION_REQUEST_ATTR_NAME, authorizationRequest);
+
+        endpoint.authorize(model, authorizationRequest.getRequestParameters(), sessionStatus, principal);
+    }
+
 
 }
