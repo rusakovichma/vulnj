@@ -59,7 +59,7 @@ public class AuthorizationSecurityTests {
     }
 
     @Test(expected = RedirectMismatchException.class)
-    public void testAuthorizationRequestWithAttackerRedirect() throws Exception {
+    public void testAuthorizationRequestOpenRedirectAttack() throws Exception {
         AuthorizationRequest authorizationRequest = getAuthorizationRequest(
                 "foo", "http://attackerapp:8082/app1/login", "HG6owT", "user_info", Collections.singleton("code"));
         model.put(AUTHORIZATION_REQUEST_ATTR_NAME, authorizationRequest);
