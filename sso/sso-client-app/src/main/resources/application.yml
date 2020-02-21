@@ -6,7 +6,7 @@ security:
     enabled: false
   oauth2:
     client:
-      clientId: clientApp
+      clientId: clientAppId
       clientSecret: clientAppSecret
       accessTokenUri: http://localhost:8080/sso-server/oauth/token
       userAuthorizationUri: http://localhost:8080/sso-server/oauth/authorize
