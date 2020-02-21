@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,6 +33,7 @@ public class SsoServerApplication {
                     .antMatchers("/login", "/oauth/authorize")
                     .and()
                     .authorizeRequests()
+                    .antMatchers(HttpMethod.GET, "/user/me").access("#oauth2.hasScope('user_info')")
                     .anyRequest().authenticated()
                     .and()
                     .formLogin().permitAll();
@@ -57,8 +59,8 @@ public class SsoServerApplication {
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients.inMemory()
-                    .withClient("foo")
-                    .secret("bar")
+                    .withClient("clientAppId")
+                    .secret("clientAppSecret")
                     .authorizedGrantTypes("authorization_code", "refresh_token", "password")
                     .scopes("user_info")
                     .autoApprove(true);

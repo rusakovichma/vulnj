@@ -4,10 +4,7 @@ import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.Mockito.*;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.AdditionalMatchers.not;
-import static org.mockito.Mockito.*;
 
-import org.apache.commons.codec.binary.Base64;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,18 +29,16 @@ public class AccessTokenEndpointAuthenticationTest {
     private BasicAuthenticationFilter filter;
     private AuthenticationManager authenticationManager;
 
-    // ~ Methods
-    // ========================================================================================================
 
     @Before
     public void setUp() {
         SecurityContextHolder.clearContext();
 
         UsernamePasswordAuthenticationToken clienaAppRequest = new UsernamePasswordAuthenticationToken(
-                "foo", "bar");
+                "clientAppId", "clientAppSecret");
 
         clienaAppRequest.setDetails(new WebAuthenticationDetails(new MockHttpServletRequest()));
-        Authentication clientAppAuth = new UsernamePasswordAuthenticationToken("foo", "bar",
+        Authentication clientAppAuth = new UsernamePasswordAuthenticationToken("clientAppId", "clientAppSecret",
                 AuthorityUtils.createAuthorityList());
 
         authenticationManager = mock(AuthenticationManager.class);
@@ -63,7 +58,8 @@ public class AccessTokenEndpointAuthenticationTest {
     @Test
     public void testOAuthTokenEndpointClientAppAuthentication() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("Authorization", "Basic Zm9vOmJhcg==");
+        //Client - 'clientApp', password - 'clientAppSecret'
+        request.addHeader("Authorization", "Basic Y2xpZW50QXBwSWQ6Y2xpZW50QXBwU2VjcmV0");
         request.setServletPath("/oauth/token");
 
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
@@ -75,7 +71,7 @@ public class AccessTokenEndpointAuthenticationTest {
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
 
         assertThat(SecurityContextHolder.getContext().getAuthentication().getName())
-                .isEqualTo("foo");
+                .isEqualTo("clientAppId");
     }
 
 }

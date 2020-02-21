@@ -26,7 +26,7 @@ public class AuthorizationSecurityTests {
 
     private AuthorizationEndpoint endpoint = new AuthorizationEndpoint();
 
-    private HashMap<String, Object> model = new HashMap<String, Object>();
+    private HashMap<String, Object> model = new HashMap<>();
 
     private SimpleSessionStatus sessionStatus = new SimpleSessionStatus();
 
@@ -38,7 +38,7 @@ public class AuthorizationSecurityTests {
     @Before
     public void init() throws Exception {
         client = new BaseClientDetails();
-        client.setRegisteredRedirectUri(Collections.singleton("http://clientapp:8082/app1/login"));
+        client.setRegisteredRedirectUri(Collections.singleton("http://clientapp:8082/clientApp/login"));
         client.setAuthorizedGrantTypes(Arrays.asList("authorization_code"));
         endpoint.setClientDetailsService(clientId -> client);
         endpoint.setTokenGranter((grantType, tokenRequest) -> null);
@@ -49,7 +49,7 @@ public class AuthorizationSecurityTests {
     @Test
     public void testRightAuthorizationRequest() {
         AuthorizationRequest authorizationRequest = getAuthorizationRequest(
-                "foo", "http://clientapp:8082/app1/login", "HG6owT", "user_info", Collections.singleton("code"));
+                "clientAppId", "http://clientapp:8082/clientApp/login", "HG6owT", "user_info", Collections.singleton("code"));
         model.put(AUTHORIZATION_REQUEST_ATTR_NAME, authorizationRequest);
 
         ModelAndView modelAndView = endpoint.authorize(model, authorizationRequest.getRequestParameters(), sessionStatus, principal);
@@ -61,7 +61,7 @@ public class AuthorizationSecurityTests {
     @Test(expected = RedirectMismatchException.class)
     public void testAuthorizationRequestOpenRedirectAttack() throws Exception {
         AuthorizationRequest authorizationRequest = getAuthorizationRequest(
-                "foo", "http://attackerapp:8082/app1/login", "HG6owT", "user_info", Collections.singleton("code"));
+                "clientAppId", "http://attackerapp:8082/clientApp/login", "HG6owT", "user_info", Collections.singleton("code"));
         model.put(AUTHORIZATION_REQUEST_ATTR_NAME, authorizationRequest);
 
         endpoint.authorize(model, authorizationRequest.getRequestParameters(), sessionStatus, principal);
