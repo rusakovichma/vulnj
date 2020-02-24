@@ -11,6 +11,7 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -78,7 +79,8 @@ public class AccessTokenSecurityTest {
         parameters.put("code", "S3SN5s");
         parameters.put("scope", "user_info");
 
-        OAuth2AccessToken expectedToken = new DefaultOAuth2AccessToken("d1402cfd-7e4f-4d3e-962e-8d1188dadf93");
+        final UUID accessToken = UUID.randomUUID();
+        OAuth2AccessToken expectedToken = new DefaultOAuth2AccessToken(accessToken.toString());
         ArgumentCaptor<TokenRequest> captor = ArgumentCaptor.forClass(TokenRequest.class);
 
         when(tokenGranter.grant(eq("authorization_code"), captor.capture())).thenReturn(expectedToken);
