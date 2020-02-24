@@ -58,7 +58,7 @@ public class AccessTokenEndpointAuthenticationTest {
     @Test
     public void testOAuthTokenEndpointClientAppAuthentication() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        //Client - 'clientApp', password - 'clientAppSecret'
+        //Client - 'clientAppId', password - 'clientAppSecret'
         request.addHeader("Authorization", "Basic Y2xpZW50QXBwSWQ6Y2xpZW50QXBwU2VjcmV0");
         request.setServletPath("/oauth/token");
 
