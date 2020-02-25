@@ -68,4 +68,13 @@ public class AuthorizationSecurityTests {
     }
 
 
+    @Test
+    public void testCSRFValidationAuthServerSide() {
+        AuthorizationRequest authorizationRequest = getAuthorizationRequest(
+                "clientAppId", "http://clientapp:8082/clientApp/login", null, "user_info", Collections.singleton("code"));
+        model.put(AUTHORIZATION_REQUEST_ATTR_NAME, authorizationRequest);
+
+        endpoint.authorize(model, authorizationRequest.getRequestParameters(), sessionStatus, principal);
+    }
+
 }
